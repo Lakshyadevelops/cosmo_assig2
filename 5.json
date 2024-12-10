@@ -1,59 +1,62 @@
 [
   {
-    $match: {
-      released: {
-        $lt: ISODate("1950-01-01")
+    "$match": {
+      "released": {
+        "$lt": ISODate("1950-01-01")
       },
       "imdb.rating": {
-        $gte: 7.0
+        "$gte": 7.0
       }
     }
   },
   {
-    $lookup: {
-      from: "comments",
-      let: {
-        movieId: "$_id"
+    "$lookup": {
+      "from": "comments",
+      "let": {
+        "movieId": "$_id"
       },
-      pipeline: [
+      "pipeline": [
         {
-          $match: {
-            $expr: {
-              $eq: ["$movie_id", "$$movieId"]
+          "$match": {
+            "$expr": {
+              "$eq": [
+                "$movie_id",
+                "$$movieId"
+              ]
             }
           }
         },
         {
-          $project: {
-            _id: 0,
-            name: 1,
-            text: 1,
-            date: 1
+          "$project": {
+            "_id": 0,
+            "name": 1,
+            "text": 1,
+            "date": 1
           }
         }
       ],
-      as: "comments"
+      "as": "comments"
     }
   },
   {
-    $addFields: {
-      comments: {
-        $slice: [
+    "$addFields": {
+      "comments": {
+        "$slice": [
           {
-            $map: {
-              input: {
-                $sortArray: {
-                  input: "$comments",
-                  sortBy: {
-                    date: 1
+            "$map": {
+              "input": {
+                "$sortArray": {
+                  "input": "$comments",
+                  "sortBy": {
+                    "date": 1
                   }
                 }
               },
-              as: "comment",
-              in: {
-                _id: "$$comment._id",
-                name: "$$comment.name",
-                text: "$$comment.text"
+              "as": "comment",
+              "in": {
+                "_id": "$$comment._id",
+                "name": "$$comment.name",
+                "text": "$$comment.text"
               }
             }
           },
@@ -63,13 +66,13 @@
     }
   },
   {
-    $project: {
-      _id: 0,
-      title: 1,
-      releaseYear: "$year",
-      genres: 1,
-      imdbRating: "$imdb.rating",
-      comments: 1
+    "$project": {
+      "_id": 0,
+      "title": 1,
+      "releaseYear": "$year",
+      "genres": 1,
+      "imdbRating": "$imdb.rating",
+      "comments": 1
     }
   }
 ]

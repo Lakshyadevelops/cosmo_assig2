@@ -1,9 +1,9 @@
 [
-	{
-    $project: {
-      _id: 0,
-      title: 1,
-      commentCount: "$num_mflix_comments"
-		}
-	}
+  {
+    "$project": {
+      "_id": 0,
+      "title": 1,
+      "commentCount": "$num_mflix_comments"
+    }
+  }
 ]

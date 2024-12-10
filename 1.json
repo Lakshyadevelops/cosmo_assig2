@@ -1,39 +1,39 @@
 [
-	{
-    $lookup: {
-      from: "comments",
-      let: {
-        movieId: "$_id"
-			},
-      pipeline: [
-				{
-          $match: {
-            $expr: {
-              $eq: [
-								"$movie_id",
-								"$$movieId"
-							]
-						}
-					}
-				},
-				{
-          $project: {
-            _id: 0,
-            name: 1,
-            email: 1,
-            text: 1,
-            date: 1
-					}
-				}
-			],
-      as: "comments"
-		}
-	},
-	{
-    $project: {
-      _id: 0,
-      title: 1,
-      comments: 1
-		}
-	}
+  {
+    "$lookup": {
+      "from": "comments",
+      "let": {
+        "movieId": "$_id"
+      },
+      "pipeline": [
+        {
+          "$match": {
+            "$expr": {
+              "$eq": [
+                "$movie_id",
+                "$$movieId"
+              ]
+            }
+          }
+        },
+        {
+          "$project": {
+            "_id": 0,
+            "name": 1,
+            "email": 1,
+            "text": 1,
+            "date": 1
+          }
+        }
+      ],
+      "as": "comments"
+    }
+  },
+  {
+    "$project": {
+      "_id": 0,
+      "title": 1,
+      "comments": 1
+    }
+  }
 ]
