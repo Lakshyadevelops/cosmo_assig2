@@ -1,0 +1,56 @@
+[
+	{
+    $addFields: {
+      imdbRating: {
+        $cond: {
+          if: {
+            $eq: [
+							{ $type: "$imdb.rating"
+							},
+							"string"
+						]
+					},
+          then: {
+            $cond: {
+              if: { $eq: [
+									"$imdb.rating",
+									""
+								]
+							},
+              then: null,
+              else: { $toDouble: "$imdb.rating"
+							}
+						}
+					},
+          else: {
+            $cond: {
+              if: { $eq: [
+									"$imdb.rating",
+									null
+								]
+							},
+              then: null,
+              else: "$imdb.rating"
+						}
+					}
+				}
+			}
+		}
+	},
+	{
+    $project: {
+      _id: 0,
+      title: 1,
+      commentCount: "$num_mflix_comments",
+      imdbRating: 1
+		}
+	},
+	{
+    $sort: {
+      imdbRating: -1
+		}
+	},
+	{
+    $limit: 5
+	}
+]
